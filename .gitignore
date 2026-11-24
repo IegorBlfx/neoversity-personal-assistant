@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+build/
+dist/
+*.egg-info/
+.personal_assistant/
+assistant.json
+assistant-damaged-*.json
+.session.lock

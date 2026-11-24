@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neoversity-personal-assistant"
+version = "0.1.0"
+description = "Персональний помічник для керування контактами й нотатками"
+requires-python = ">=3.12"
+readme = "README.md"
+dependencies = []
+
+[project.scripts]
+assistant = "assistant.main:main"
+
+[tool.setuptools]
+packages = ["assistant"]
