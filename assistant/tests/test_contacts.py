@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from assistant.address_book import AddressBook
 from assistant.fields import Address, Birthday, Email, InputError, Name, Phone
 from assistant.record import Record
+from assistant.view import contact_table
 
 
 class ContactTests(unittest.TestCase):
@@ -158,6 +159,25 @@ class ContactTests(unittest.TestCase):
                     with self.assertRaises(InputError):
                         book.birthdays(days, within=within, today=today)
         self.assertEqual(book.birthdays(0, today=today), [])
+
+    def test_table_fits_width_with_many_phones(self):
+        """Таблиця вкладається в ширину, а картка показує всі номери."""
+        phones = ["0501234567", "0507654321", "0500000001", "0500000002"]
+        record = Record("Лада Зоряна", phones, "вул. Зоряна 2, Київ", "user@example.com", "03.04.2000")
+        for width in (70, 80, 100):
+            with self.subTest(width=width):
+                lines = contact_table([record], width=width).splitlines()
+                self.assertLessEqual(max(map(len, lines)), width)
+        narrow = contact_table([record], width=70)
+        self.assertIn("0501234567", narrow)
+        self.assertIn("+3", narrow)
+        self.assertEqual(len(record.phones), 4)
+        for phone in phones:
+            self.assertIn(phone, str(record))
+        wide = contact_table([record], width=200)
+        for phone in phones:
+            self.assertIn(phone, wide)
+        self.assertNotIn("+3", wide)
 
     def test_year_and_leap(self):
         """Новий рік, високосний рік і сьогодні обробляються явно."""
